@@ -20,87 +20,69 @@ export default class DraggableUploader extends React.Component {
   };
 
   onFileLoad(e) {
-    //Get current selected or dropped file (it gives you the ability to load multiple images).
     const file = e.currentTarget.files[0];
-    //Create instance
     let fileReader = new FileReader();
-    //Register event listeners
+
     fileReader.onload = () => {
-      //File Instance for holding image data
       const file = {
         data: fileReader.result,
         isUploading: false,
       };
-      //Add file to the loadedFiles Array
       this.addLoadedFile(file);
     };
-    //Operation Aborted
+
     fileReader.onabort = () => {
       alert("Reading Aborted");
     };
-    //Error when loading
+
     fileReader.onerror = () => {
       alert("Reading ERROR!");
     };
-    //Read the file as a Data URL (which gonna give you a base64 encoded image data)
+
     fileReader.readAsDataURL(file);
   }
 
   addLoadedFile(file) {
-    //SetState could take a callback which requires returning the state object to be applied
     this.setState((prevState) => ({
       loadedFiles: [...prevState.loadedFiles, file],
     }));
   }
 
   removeLoadedFile(file) {
-    //Remove file from the State
     this.setState((prevState) => {
       let loadedFiles = prevState.loadedFiles;
-      //filter through all items but the one needs to be removed
       let newLoadedFiles = _.filter(loadedFiles, (ldFile) => {
-        //return all elements but the file we want to remove (to get a new array without the target image file)
         return ldFile !== file;
       });
-      //Return loadedFiles to update the state
       return { loadedFiles: newLoadedFiles };
     });
   }
-  //Remove all Files (Simply set the array to empty)
+
   removeAllLoadedFile() {
     this.setState({ loadedFiles: [] });
   }
 
   updateLoadedFile(oldFile, newFile) {
     this.setState((prevState) => {
-      //Create a new instance since we need to mutate the array
       const loadedFiles = [...prevState.loadedFiles];
-      //Find target file to be updated (oldFile)
       _.find(loadedFiles, (file, idx) => {
-        if (file === oldFile)
-          //This is it! Update it with the new file object
-          loadedFiles[idx] = newFile;
+        if (file === oldFile) loadedFiles[idx] = newFile;
       });
+
       //Set State
       return { loadedFiles };
     });
-    //Return new file instance so we could use later as oldFile if we ever wanted to update
     return newFile;
   }
 
   onUpload() {
     const { loadedFiles } = this.state;
-    //Loop through loaded files and (AJAX Each one to the server)
     loadedFiles.map((file, idx) => {
-      /*You should send AJAX request to the backend over here but we are just going to simulate the function of a backend server by using the setTimeout function*/
-      //Update file (Change it's state to uploading)
       let newFile = this.updateLoadedFile(file, {
         ...file,
         isUploading: true,
       });
-      //Simulate a REAL WEB SERVER DOING IMAGE UPLOADING (3seconds)
       setTimeout(() => {
-        //Get it back to it's original State
         this.updateLoadedFile(newFile, {
           ...newFile,
           isUploading: false,
@@ -111,7 +93,6 @@ export default class DraggableUploader extends React.Component {
 
   render() {
     const { loadedFiles } = this.state;
-
     const { address, bedroom, bathroom, description } = this.props;
     return (
       <div
