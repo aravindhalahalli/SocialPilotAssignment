@@ -13,6 +13,7 @@ export default class DraggableUploader extends React.Component {
     this.state = {
       loadedFiles: [],
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   //back
@@ -64,10 +65,26 @@ export default class DraggableUploader extends React.Component {
     });
   }
   
+  //handle submit and upload
+  handleSubmit(){
+    if(this.state.loadedFiles.length < 1){
+      alert("Please Upload images")
+      return
+    }
+    alert(
+      "Thanks for filling the property form and Please see the console for the Form Data and Image with Base64 Data"
+    );
+    console.log(
+      `The form Data: ${this.props.address},${this.props.bedroom},${this.props.bathroom},${this.props.description}.}`
+    );
+    console.log(`Uploaded image: ${this.state.loadedFiles[0].data}`);
+    setInterval(() => {
+      window.location.reload();
+    }, 10000);
+  }
 
   render() {
     const { loadedFiles } = this.state;
-    const { address, bedroom, bathroom, description } = this.props;
     return (
       <div
         className="inner-container"
@@ -124,20 +141,9 @@ export default class DraggableUploader extends React.Component {
           </button>
           <button
             className="Next"
-            onClick={() => {
-              alert(
-                "Thanks for filling the property form and Please see the console for the Form Data and Image with Base64 Data"
-              );
-              console.log(
-                `The form Data: ${address},${bedroom},${bathroom},${description}.}`
-              );
-              console.log(`Uploaded image: ${this.state.loadedFiles[0].data}`);
-              setInterval(() => {
-                window.location.reload();
-              }, 10000);
-            }}
+            onClick={this.handleSubmit}
           >
-            Upload
+            Submit and Upload
           </button>
         </div>
       </div>
