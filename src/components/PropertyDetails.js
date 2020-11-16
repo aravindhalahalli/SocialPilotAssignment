@@ -1,16 +1,26 @@
 import React, { Component } from "react";
 import { Form, Col } from "react-bootstrap";
-import Search from './Search';
+import Search from "./Search";
 
 class PropertyDetails extends Component {
+  //Next
   continue = (e) => {
     e.preventDefault();
     this.props.nextStep();
   };
-
+  //Back
   back = (e) => {
     e.preventDefault();
     this.props.prevStep();
+  };
+//Limit intput numbers
+  maxLengthCheck = (object) => {
+    if (object.target.value.length > object.target.maxLength) {
+      object.target.value = object.target.value.slice(
+        0,
+        object.target.maxLength
+      );
+    }
   };
 
   render() {
@@ -22,8 +32,9 @@ class PropertyDetails extends Component {
       handleChange,
       validated,
       handleSubmit,
-      handleAddress
+      handleAddress,
     } = this.props;
+
     return (
       <>
         <h5>Enter your Property Details:</h5>
@@ -32,15 +43,6 @@ class PropertyDetails extends Component {
             <Form.Group as={Col} md="6" controlId="validationCustom01">
               <Form.Label>Address</Form.Label>
               <Search handleAddress={handleAddress} />
-              {/* <Form.Control
-                required
-                type="text"
-                placeholder="Enter Address or auto fill"
-                name="address"
-                value={address}
-                onChange={handleChange("address")}
-              /> */}
-
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
           </Form.Row>
@@ -52,6 +54,9 @@ class PropertyDetails extends Component {
                 type="number"
                 name="bathroom"
                 value={bathroom}
+                maxLength="2"
+                max="10"
+                onInput={this.maxLengthCheck}
                 placeholder="Bath Room"
                 onChange={handleChange("bathroom")}
               />
@@ -66,6 +71,9 @@ class PropertyDetails extends Component {
                 type="number"
                 name="bedroom"
                 value={bedroom}
+                maxLength="2"
+                max="5"
+                onInput={this.maxLengthCheck}
                 onChange={handleChange("bedroom")}
                 placeholder="Bed Room"
                 required
@@ -89,49 +97,13 @@ class PropertyDetails extends Component {
             </Form.Group>
           </Form.Row>
         </Form>
-        {/* <label>
-          <input
-            type="text"
-            name="address"
-            value={address}
-            placeholder="Address"
-            onChange={handleChange("address")}
-          />
-        </label>
-        <label>
-          <input
-            type="text"
-            name="bathroom"
-            value={bathroom}
-            placeholder="Bath Room"
-            onChange={handleChange("bathroom")}
-          />
-        </label>
-        <label>
-          <input
-            type="text"
-            name="bedroom"
-            value={bedroom}
-            onChange={handleChange("bedroom")}
-            placeholder="Bed Room"
-          />
-        </label>
-        <label>
-          <input
-            type="text"
-            name="description"
-            value={description}
-            onChange={handleChange("description")}
-            placeholder="Description"
-          />
-        </label> */}
         <button className="Back" onClick={this.back}>
           Back
         </button>
         <button
           className="Next"
           onClick={this.continue}
-          disabled={!address||!bathroom || !bedroom || !description}
+          disabled={!address || !bathroom || !bedroom || !description}
         >
           Submit and Next
         </button>

@@ -43,13 +43,14 @@ class UploadCSV extends React.Component {
     reader.onload = function () {
       var text = reader.result;
       data = context.CSVToArray(text, ",");
-      console.log(
-        `CSV Data inclcudes from sample csv file data are: ${data.forEach(
-          (ele) => {
-            console.table(ele);
-          }
-        )}`
-      );
+      console.table(data);
+      // console.log(
+      //   `CSV Data inclcudes from sample csv file data are: ${data.forEach(
+      //     (ele) => {
+      //       console.log(ele);
+      //     }
+      //   )}`
+      // );
     };
     reader.readAsText(input.files[0]);
   };

@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 
-// import AllInfo from "./AllInfo";
 import SelectButton from "./SelectButton";
 import PropertyDetails from "./PropertyDetails";
 import DraggableUploader from "./ImageUpload/DragableImage";
-// import { add } from "lodash";
 
 export class StepForm extends Component {
   state = {
@@ -24,6 +22,7 @@ export class StepForm extends Component {
     validated: false,
   };
 
+  //Next func
   nextStep = () => {
     const { step } = this.state;
 
@@ -32,6 +31,7 @@ export class StepForm extends Component {
     });
   };
 
+  //prev func
   prevStep = () => {
     const { step } = this.state;
     this.setState({
@@ -39,26 +39,17 @@ export class StepForm extends Component {
     });
   };
 
+  //handling all inputs func
   handleChange = (input) => (e) => {
     this.setState({ [input]: e.target.value });
   };
 
-  handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    this.setState({
-      validated: true,
-    });
-  };
-
+  //func for handling google place api func
   handleAddress = (address) => {
     this.setState({'address': address});
   }
 
+  //for each steps Ui renders
   showStep = () => {
     const { step, address, bedroom, bathroom, description } = this.state;
 
@@ -90,7 +81,6 @@ export class StepForm extends Component {
 
   render() {
     const { step } = this.state;
-
     return (
       <>
         <h2>Step {step} of 3.</h2>

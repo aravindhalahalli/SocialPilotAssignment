@@ -7,6 +7,7 @@ import { remove } from "react-icons-kit/fa/remove";
 import "./style.css";
 
 export default class DraggableUploader extends React.Component {
+  //state for Image upload
   constructor(props) {
     super(props);
     this.state = {
@@ -14,13 +15,16 @@ export default class DraggableUploader extends React.Component {
     };
   }
 
+  //back
   back = (e) => {
     e.preventDefault();
     this.props.prevStep();
   };
 
+  //onfile loading
   onFileLoad(e) {
-    const file = e.currentTarget.files[0];
+    // const file = e.currentTarget.files[0];
+    const file = e.currentTarget.files[0] || e.dataTransfer.files[0]
     let fileReader = new FileReader();
 
     fileReader.onload = () => {
@@ -42,12 +46,14 @@ export default class DraggableUploader extends React.Component {
     fileReader.readAsDataURL(file);
   }
 
+  //adding file
   addLoadedFile(file) {
     this.setState((prevState) => ({
       loadedFiles: [...prevState.loadedFiles, file],
     }));
   }
 
+  //remove file
   removeLoadedFile(file) {
     this.setState((prevState) => {
       let loadedFiles = prevState.loadedFiles;
@@ -57,39 +63,7 @@ export default class DraggableUploader extends React.Component {
       return { loadedFiles: newLoadedFiles };
     });
   }
-
-  removeAllLoadedFile() {
-    this.setState({ loadedFiles: [] });
-  }
-
-  updateLoadedFile(oldFile, newFile) {
-    this.setState((prevState) => {
-      const loadedFiles = [...prevState.loadedFiles];
-      _.find(loadedFiles, (file, idx) => {
-        if (file === oldFile) loadedFiles[idx] = newFile;
-      });
-
-      //Set State
-      return { loadedFiles };
-    });
-    return newFile;
-  }
-
-  onUpload() {
-    const { loadedFiles } = this.state;
-    loadedFiles.map((file, idx) => {
-      let newFile = this.updateLoadedFile(file, {
-        ...file,
-        isUploading: true,
-      });
-      setTimeout(() => {
-        this.updateLoadedFile(newFile, {
-          ...newFile,
-          isUploading: false,
-        });
-      }, 3000);
-    });
-  }
+  
 
   render() {
     const { loadedFiles } = this.state;
@@ -122,7 +96,7 @@ export default class DraggableUploader extends React.Component {
                 <div className="file" key={idx}>
                   <img src={file.data} alt="img" />
                   <div className="container">
-                    <span className="progress-bar">{file.isUploading}</span>
+                    {/* <span className="progress-bar">{file.isUploading}</span> */}
                     <span
                       className="remove-btn"
                       onClick={() => this.removeLoadedFile(file)}
